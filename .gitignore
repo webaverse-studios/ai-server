@@ -1,4 +1,4 @@
-### Git ###
+### Git ### 
 .orig
 .env
 
@@ -278,3 +278,4 @@ fabric.properties
 #!/.yarn/cache
 /.pnp.*
 
+.vercel

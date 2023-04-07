@@ -1,5 +1,3 @@
-import { Readable } from 'stream'
-
 import { getSTTReponse } from '../services/stt.mjs'
 
 /**
@@ -10,13 +8,14 @@ import { getSTTReponse } from '../services/stt.mjs'
  */
 export default async ( req, res ) => {
   let audioBody = req.body
-  const proxyResponse = await getSTTReponse( audioBody )
+  let audioFile = req.files?.[0]
+
+  const proxyResponse = await getSTTReponse( audioBody, audioFile )
 
   if ( !proxyResponse.ok ) {
     const text = await proxyResponse.text()
-    console.error( '[TTS Error]: ', text )
-    res.status( 500 ).send( text )
-    return
+    console.error( '[STT Error]: ', text )
+    return res.status( 500 ).send( text )
   }
 
   // Set headers
@@ -28,7 +27,5 @@ export default async ( req, res ) => {
   })
 
   res.status( proxyResponse.status )
-
-  // @ts-ignore
-  Readable.fromWeb( proxyResponse.body ).pipe( res )
+  proxyResponse.body?.pipe( res )
 }
