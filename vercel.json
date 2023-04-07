@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "env": {
+        "PORT": "@PORT",
+        "OPENAI_API_KEY": "@OPENAI_API_KEY",
+        "ELEVEN_LABS_API_KEY": "@ELEVEN_LABS_API_KEY"
+    },
+    "builds": [
+        {
+            "src": "./index.mjs",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/"
+        }
+    ]
+}
