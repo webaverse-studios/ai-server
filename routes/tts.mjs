@@ -13,8 +13,7 @@ export default async ( req, res ) => {
   if ( !proxyResponse.ok ) {
     const text = await proxyResponse.text()
     console.error( '[TTS Error]: ', text )
-    res.status( 500 ).send( text )
-    return
+    return res.status( 500 ).send( text )
   }
 
   proxyResponse.headers.forEach(( value, key ) => {

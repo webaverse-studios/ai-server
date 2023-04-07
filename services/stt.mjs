@@ -13,19 +13,20 @@ import { OPENAI_API_BASE_URL, OPENAI_API_KEY } from '../config.mjs'
  * @param {AudioBody} audioBody The body of the request to the OpenAI API
  * @returns {Promise<import('node-fetch').Response>} The response from the OpenAI API
  */
-export async function getSTTReponse ( audioBody ) {
+export async function getSTTReponse( audioBody ) {
+  const form = new URLSearchParams()
+  form.append( 'file', audioBody.file )
+  form.append( 'model', 'whisper-1' )
+
   return fetch( `${OPENAI_API_BASE_URL}/audio/transcriptions`, {
     // @ts-ignore
     duplex: 'half',
     method: 'POST',
-    body: JSON.stringify({
-      ...audioBody,
-      model: 'whisper-1',
-    }),
+    body: form,
     headers: {
       accept: '*/*',
       Authorization: `Bearer ${OPENAI_API_KEY}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
     },
   })
 }
