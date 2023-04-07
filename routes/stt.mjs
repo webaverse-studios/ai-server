@@ -1,5 +1,3 @@
-import { Readable } from 'stream'
-
 import { getSTTReponse } from '../services/stt.mjs'
 
 /**
@@ -9,9 +7,9 @@ import { getSTTReponse } from '../services/stt.mjs'
  * @param {import('express').Response} res The response from the STT API
  */
 export default async ( req, res ) => {
-  let audioBody = req.body
+  let audioFile = req.files?.[0]
 
-  const proxyResponse = await getSTTReponse( audioBody )
+  const proxyResponse = await getSTTReponse( audioFile )
 
   if ( !proxyResponse.ok ) {
     const text = await proxyResponse.text()
@@ -28,7 +26,5 @@ export default async ( req, res ) => {
   })
 
   res.status( proxyResponse.status )
-
-  // @ts-ignore
-  Readable.fromWeb( proxyResponse.body ).pipe( res )
+  proxyResponse.body?.pipe( res )
 }

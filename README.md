@@ -56,9 +56,9 @@ The REST API to the example app is described below.
 `POST /stt`
 
     curl --request POST \
-    --url http://localhost:8000/sst \
-    --header 'Content-Type: application/x-www-form-urlencoded' \
-    --data 'file=<audio stream>'
+    --url http://localhost:8000/stt \
+    --header 'Content-Type: multipart/form-data' \
+    --form file=@/path/to/file.mp3
 
 #### Response
 
@@ -66,17 +66,16 @@ The REST API to the example app is described below.
     Date: Fri, 7 April 2023 12:00:00 GMT
     Status: 200 OK
     X-Powered-By: Express
-    access-control-allow-headers: *
-    access-control-allow-methods: POST, OPTIONS, DELETE, GET
-    access-control-allow-origin: *
-    access-control-expose-headers: request_id
-    alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-    connection: close
-    content-type: audio/mpeg
-    date: Fri, 07 Apr 2023 15:02:12 GMT
-    request_id: c77453ad1bf045d28565fdb96f3ba856
-    server: uvicorn
-    transfer-encoding: chunked
-    via: 1.1 google
+    content-type: application/json
+    Date: Fri, 07 Apr 2023 19:57:24 GMT
+    Connection: keep-alive
+    Keep-Alive: timeout=5
+    Transfer-Encoding: chunked
 
-    <audio stream>
+    {
+        "task":"transcribe",
+        "language":"english",
+        "duration": <number>,
+        "segments": TextSegment[],
+        "text": <text>
+    }
