@@ -7,10 +7,15 @@ import { getSTTReponse } from '../services/stt.mjs'
  * @param {import('express').Response} res The response from the STT API
  */
 export default async ( req, res ) => {
-  let audioBody = req.body
   let audioFile = req.files?.[0]
+  let { model, language, responseFormat } = req.body
 
-  const proxyResponse = await getSTTReponse( audioBody, audioFile )
+  const proxyResponse = await getSTTReponse({
+    model,
+    language,
+    audioFile,
+    responseFormat,
+  })
 
   if ( !proxyResponse.ok ) {
     const text = await proxyResponse.text()

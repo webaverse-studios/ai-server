@@ -11,12 +11,12 @@ app.use( express.json())
 app.use( express.urlencoded({ extended: true }))
 
 // ELEVEN-LABS
-app.post( '/tts', ttsHandler )
+app.post( '/tts/:voiceId', ttsHandler )
 
 // Whisper
 app.post( '/stt', upload.any(), sttHandler )
 
 app.listen( PORT, () => {
   // eslint-disable-next-line no-console
-  console.log( `Example app listening on port ${PORT}` )
+  console.log( `AI Server listening on port ${PORT}` )
 })

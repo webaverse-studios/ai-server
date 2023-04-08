@@ -10,26 +10,31 @@ const DEFAULT_RESPONSE_FORMAT = 'verbose_json'
 /**
  * @typedef {object} AudioBody The body of the request to the OpenAI API
  * @property {string} model The model to use
- * @property {Blob} file The base64 encoded audio file
  * @property {string} language The language of the audio file
  * @property {string} responseFormat The format of the response
+ * @property {import('express').Request['file']} audioFile The audio file
  */
 
 /**
  * Get the transcription of an audio file
  *
- * @param {AudioBody} audioBody The body of the request to the OpenAI API
- * @param {import('express').Request['file']} audioFile The audio file
+ * @param {AudioBody} params The body of the request to the OpenAI API
  * @returns {Promise<import('node-fetch').Response>} The response from the OpenAI API
  */
-export async function getSTTReponse( audioBody, audioFile ) {
-  const fd = new FormData()
-  fd.append( 'model', audioBody.model ?? DEFAULT_MODEL )
-  fd.append( 'language', audioBody.language ?? DEFAULT_LANGUAGE )
-  fd.append(
-    'responseFormat',
-    audioBody.responseFormat ?? DEFAULT_RESPONSE_FORMAT
+export async function getSTTReponse({ audioFile, ...audioBody }) {
+  let body = Object.assign(
+    {
+      model: DEFAULT_MODEL,
+      language: DEFAULT_LANGUAGE,
+      responseFormat: DEFAULT_RESPONSE_FORMAT,
+    },
+    audioBody
   )
+
+  const fd = new FormData()
+  fd.append( 'model', body.model )
+  fd.append( 'language', body.language )
+  fd.append( 'responseFormat', body.responseFormat )
   fd.append( 'file', audioFile?.buffer, 'speech.webm' )
 
   return fetch( `${OPENAI_API_BASE_URL}/audio/transcriptions`, {

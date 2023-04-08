@@ -2,8 +2,6 @@ import fetch from 'node-fetch'
 
 import { ELEVEN_LABS_API_KEY, ELEVEN_LABS_BASE_URL } from '../config.mjs'
 
-const DEFAULT_VOICE_ID = '21m00Tcm4TlvDq8ikWAM'
-
 /**
  * @typedef {object} VoiceSettings
  * @property {number} stability The stability of the voice
@@ -16,14 +14,15 @@ const DEFAULT_VOICE_ID = '21m00Tcm4TlvDq8ikWAM'
  * @param {object} ttsBody The body of the request to the Eleven Labs API
  * @param {string} ttsBody.voiceId The text to be converted to speech
  * @param {string} ttsBody.text The text to be converted to speech
- * @param {VoiceSettings} ttsBody.voiceSettings The settings of the voice
+ * @param {VoiceSettings} ttsBody.voice_settings The settings of the voice
  * @returns {Promise<import('node-fetch').Response>} The response from the Eleven Labs API
  */
-export async function getTTSReponse( ttsBody ) {
-  let voiceId = ttsBody['voiceId'] ?? DEFAULT_VOICE_ID
-
+export async function getTTSReponse({ voiceId, text, voice_settings }) {
   return fetch( `${ELEVEN_LABS_BASE_URL}/${voiceId}/stream`, {
-    body: JSON.stringify( ttsBody ),
+    body: JSON.stringify({
+      text,
+      voice_settings,
+    }),
     method: 'POST',
     headers: {
       accept: '*/*',
