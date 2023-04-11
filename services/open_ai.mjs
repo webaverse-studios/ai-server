@@ -49,13 +49,30 @@ export async function getSTTReponse({ audioFile, ...audioBody }) {
 }
 
 /**
+ * Given a prompt, the model will return one or more predicted completions,
+ * and can also return the probabilities of alternative tokens at each position.
+ *
+ * @param {object } req_body The body of the request to the OpenAI API
+ */
+export async function getCompletionResponse( req_body ) {
+  return fetch( `${OPENAI_API_BASE_URL}/completions`, {
+    method: 'POST',
+    body: JSON.stringify( req_body ),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+  })
+}
+
+/**
  * @typedef {object} Message The body of the request to the OpenAI API
  * @property {string} role the role of the message
  * @property {any} content the content of the message
  */
 
 /**
- * Get Text completion response
+ * Given a chat conversation, the model will return a chat completion response.
  *
  * @param {object} params The body of the request to the OpenAI API
  * @param {Message[]}params.messages The messages to send to the OpenAI API
@@ -65,6 +82,44 @@ export async function getChatCompletionResponse({ messages, model }) {
   return fetch( `${OPENAI_API_BASE_URL}/chat/completions`, {
     method: 'POST',
     body: JSON.stringify({ model, messages }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+  })
+}
+
+/**
+ * Given a prompt and/or an input image, the model will generate a new image.
+ *
+ * @param {object } req_body The body of the request to the OpenAI API
+ */
+export async function getImageGenerationsResponse({
+  n,
+  size,
+  user,
+  prompt,
+  response_format,
+}) {
+  return fetch( `${OPENAI_API_BASE_URL}/images/generations`, {
+    method: 'POST',
+    body: JSON.stringify({ n, size, user, prompt, response_format }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+  })
+}
+
+/**
+ * Given a prompt and/or an input image, the model will generate a new image.
+ *
+ * @param {object } req_body The body of the request to the OpenAI API
+ */
+export async function getEmbeddedResponse({ user, input, model }) {
+  return fetch( `${OPENAI_API_BASE_URL}/embeddings`, {
+    method: 'POST',
+    body: JSON.stringify({ user, input, model }),
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${OPENAI_API_KEY}`,
