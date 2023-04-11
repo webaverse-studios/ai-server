@@ -34,18 +34,23 @@ export default async ( req, res, method ) => {
     case OPEN_AI_METHOD.COMPLETION:
       proxyResponse = await getCompletionResponse( req.body )
       break
+
     // /chat/completions
     case OPEN_AI_METHOD.CHAT_COMPLETION:
       proxyResponse = await getChatCompletionResponse( req.body )
       break
+
     // /images/generations
     case OPEN_AI_METHOD.IMAGES_GENERATION:
       proxyResponse = await getImageGenerationsResponse( req.body )
       break
+
     // /embeddings
     case OPEN_AI_METHOD.EMBEDDINGS:
+      console.log( 'EMBEDDING DATA', req.body, req )
       proxyResponse = await getEmbeddedResponse( req.body )
       break
+
     // /stt
     case OPEN_AI_METHOD.STT: {
       let audioFile = req.files?.[0]
