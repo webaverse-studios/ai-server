@@ -31,8 +31,6 @@ export async function getSTTReponse({ audioFile, ...audioBody }) {
     audioBody
   )
 
-  console.log( body )
-
   const fd = new FormData()
   fd.append( 'model', body.model )
   fd.append( 'language', body.language )

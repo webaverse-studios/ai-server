@@ -1,4 +1,5 @@
 import express from 'express'
+import morgan from 'morgan'
 import multer from 'multer'
 
 import { PORT } from './config.mjs'
@@ -10,6 +11,7 @@ const upload = multer()
 
 app.use( express.json())
 app.use( express.urlencoded({ extended: true }))
+app.use( morgan( 'combined' ))
 
 // ELEVEN-LABS
 app.post( '/tts/:voiceId', ttsHandler )
