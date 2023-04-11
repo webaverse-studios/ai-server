@@ -3,7 +3,6 @@ import fetch from 'node-fetch'
 
 import { OPENAI_API_BASE_URL, OPENAI_API_KEY } from '../config.mjs'
 
-const DEFAULT_LANGUAGE = 'en'
 const DEFAULT_MODEL = 'whisper-1'
 const DEFAULT_RESPONSE_FORMAT = 'verbose_json'
 
@@ -25,8 +24,7 @@ export async function getSTTReponse({ audioFile, ...audioBody }) {
   let body = Object.assign(
     {
       model: DEFAULT_MODEL,
-      language: DEFAULT_LANGUAGE,
-      responseFormat: DEFAULT_RESPONSE_FORMAT,
+      response_format: DEFAULT_RESPONSE_FORMAT,
     },
     audioBody
   )
