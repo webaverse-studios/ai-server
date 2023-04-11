@@ -21,9 +21,9 @@
     "@types/node": "^18.15.11",
     "@types/prettier": "=2",
     "@webaverse-studios/eslint-config": "=1.1.6",
-    "eslint": "=8.37.0",
+    "eslint": "=8.38.0",
     "eslint-plugin-import": "=2.27.5",
-    "eslint-plugin-jsdoc": "=40.1.1",
+    "eslint-plugin-jsdoc": "=41.0.0",
     "eslint-plugin-promise": "=6.1.1",
     "prettier": "=2.8.7"
   }

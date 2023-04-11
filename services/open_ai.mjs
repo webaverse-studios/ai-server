@@ -47,3 +47,27 @@ export async function getSTTReponse({ audioFile, ...audioBody }) {
     },
   })
 }
+
+/**
+ * @typedef {object} Message The body of the request to the OpenAI API
+ * @property {string} role the role of the message
+ * @property {any} content the content of the message
+ */
+
+/**
+ * Get Text completion response
+ *
+ * @param {object} params The body of the request to the OpenAI API
+ * @param {Message[]}params.messages The messages to send to the OpenAI API
+ * @param {string} params.model The model to use
+ */
+export async function getChatCompletionResponse({ messages, model }) {
+  return fetch( `${OPENAI_API_BASE_URL}/chat/completions`, {
+    method: 'POST',
+    body: JSON.stringify({ model, messages }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+  })
+}

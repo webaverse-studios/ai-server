@@ -19,11 +19,8 @@ import { ELEVEN_LABS_API_KEY, ELEVEN_LABS_BASE_URL } from '../config.mjs'
  */
 export async function getTTSReponse({ voiceId, text, voice_settings }) {
   return fetch( `${ELEVEN_LABS_BASE_URL}/${voiceId}/stream`, {
-    body: JSON.stringify({
-      text,
-      voice_settings,
-    }),
     method: 'POST',
+    body: JSON.stringify({ text, voice_settings }),
     headers: {
       accept: '*/*',
       'xi-api-key': ELEVEN_LABS_API_KEY,

@@ -1,4 +1,4 @@
-import { getSTTReponse } from '../services/stt.mjs'
+import { getSTTReponse } from '../services/index.mjs'
 
 /**
  * Handle the request to the STT API
