@@ -27,7 +27,7 @@ app.post( '/images/generations', ( req, res ) =>
 app.post( '/embeddings', ( req, res ) =>
   openAIHandler( req, res, OPEN_AI_METHOD.EMBEDDINGS )
 )
-app.post( '/stt', upload.any(), ( req, res ) =>
+app.post( '/audio/transcriptions', upload.any(), ( req, res ) =>
   openAIHandler( req, res, OPEN_AI_METHOD.STT )
 )
 
