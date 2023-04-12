@@ -14,7 +14,7 @@ app.use( express.urlencoded({ extended: true }))
 app.use( morgan( 'combined' ))
 
 // ELEVEN-LABS
-app.post( '/tts/:voiceId', ttsHandler )
+app.post( '/tts/:voiceId/stream', ttsHandler )
 
 // Open AI
 app.post( '/completions', ( req, res ) =>

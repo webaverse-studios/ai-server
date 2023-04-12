@@ -47,7 +47,6 @@ export default async ( req, res, method ) => {
 
     // /embeddings
     case OPEN_AI_METHOD.EMBEDDINGS:
-      console.log( 'EMBEDDING DATA', req.body, req )
       proxyResponse = await getEmbeddedResponse( req.body )
       break
 
