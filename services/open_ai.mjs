@@ -1,5 +1,5 @@
-import FormData from 'form-data'
-import fetch from 'node-fetch'
+// import FormData from 'form-data'
+// import fetch from 'node-fetch'
 
 import { OPENAI_API_BASE_URL, OPENAI_API_KEY } from '../config.mjs'
 
@@ -19,7 +19,7 @@ const DEFAULT_RESPONSE_FORMAT = 'verbose_json'
  * Get the transcription of an audio file
  *
  * @param {AudioBody} params The body of the request to the OpenAI API
- * @returns {Promise<import('node-fetch').Response>} The response from the OpenAI API
+ * @returns {Promise<Response>} The response from the OpenAI API
  */
 export async function getSTTReponse({ audioFile, ...audioBody }) {
   let body = Object.assign(
@@ -31,11 +31,16 @@ export async function getSTTReponse({ audioFile, ...audioBody }) {
     audioBody
   )
 
+  if ( !audioFile?.buffer ) throw new Error( 'No audio file provided' )
+
+  let buff = audioFile?.buffer
+  const blob = new Blob([buff]) // JavaScript Blob
+
   const fd = new FormData()
   fd.append( 'model', body.model )
   fd.append( 'language', body.language )
   fd.append( 'response_format', body.responseFormat )
-  fd.append( 'file', audioFile?.buffer, 'speech.webm' )
+  fd.append( 'file', blob, 'speech.webm' )
 
   return fetch( `${OPENAI_API_BASE_URL}/audio/transcriptions`, {
     body: fd,
@@ -43,6 +48,7 @@ export async function getSTTReponse({ audioFile, ...audioBody }) {
     duplex: 'half',
     method: 'POST',
     headers: {
+      ContentType: 'multipart/form-data',
       Authorization: `Bearer ${OPENAI_API_KEY}`,
     },
   })
@@ -77,8 +83,13 @@ export async function getCompletionResponse( req_body ) {
  * @param {object} params The body of the request to the OpenAI API
  * @param {Message[]}params.messages The messages to send to the OpenAI API
  * @param {string} params.model The model to use
+ * @param {string} params.stream Whether to stream back partial progress.
  */
-export async function getChatCompletionResponse({ messages, model, stream }) {
+export async function getChatCompletionResponse({
+  messages,
+  model,
+  stream,
+}) {
   return fetch( `${OPENAI_API_BASE_URL}/chat/completions`, {
     method: 'POST',
     body: JSON.stringify({ model, messages, stream }),
