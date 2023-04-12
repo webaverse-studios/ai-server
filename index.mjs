@@ -132,7 +132,7 @@ const _proxyTmp = (req, res) => {
   app.all('*', async (req, res, next) => {
     _setHeaders(res);
 
-    const hostname = req.headers.host.replace(/:.*$/, '');
+    // const hostname = req.headers.host.replace(/:.*$/, '');
 
     if (req.method === 'OPTIONS') {
       res.end();
