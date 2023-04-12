@@ -78,13 +78,13 @@ export async function getCompletionResponse( req_body ) {
  * @param {Message[]}params.messages The messages to send to the OpenAI API
  * @param {string} params.model The model to use
  */
-export async function getChatCompletionResponse({ messages, model }) {
+export async function getChatCompletionResponse({ messages, model, stream }) {
   return fetch( `${OPENAI_API_BASE_URL}/chat/completions`, {
     method: 'POST',
-    body: JSON.stringify({ model, messages }),
+    body: JSON.stringify({ model, messages, stream }),
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${OPENAI_API_KEY}`,
+      'Content-Type': 'application/json',
     },
   })
 }
