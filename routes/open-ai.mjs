@@ -6,6 +6,10 @@ import {
   getSTTReponse,
 } from '../services/index.mjs'
 
+export const config = {
+  runtime: 'edge',
+}
+
 /**
  * Enum for Open AI Methods
  *
