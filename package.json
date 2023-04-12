@@ -5,6 +5,7 @@
   "author": "",
   "license": "ISC",
   "main": "index.mjs",
+  "type": "module",
   "scripts": {
     "dev": "node index.mjs"
   },
@@ -16,15 +17,5 @@
     "multer": "^1.4.5-lts.1",
     "node-fetch": "^3.3.1",
     "stream-to-blob": "^2.0.1"
-  },
-  "devDependencies": {
-    "@types/node": "^18.15.11",
-    "@types/prettier": "=2",
-    "@webaverse-studios/eslint-config": "=1.1.6",
-    "eslint": "=8.37.0",
-    "eslint-plugin-import": "=2.27.5",
-    "eslint-plugin-jsdoc": "=40.1.1",
-    "eslint-plugin-promise": "=6.1.1",
-    "prettier": "=2.8.7"
   }
 }
