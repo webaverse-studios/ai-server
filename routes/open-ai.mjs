@@ -78,5 +78,6 @@ export default async ( req, res, method ) => {
   }
 
   res.status( proxyResponse.status )
+  res.setHeader( 'transfer-encoding', 'chunked' )
   proxyResponse.body?.pipe( res )
 }
