@@ -141,7 +141,7 @@ export class AiServer {
           res.status(500).send(text);
         }
       } else if (match = req.url.match(/^\/api\/ai\/(audio\/transcriptions)/)) {
-        console.log('proxy audio', req.url);
+        // console.log('proxy audio');
 
         const sub = match[1];
 
@@ -186,7 +186,7 @@ export class AiServer {
         }
       } else if (match = req.url.match(/^\/api\/ai\/(text-to-speech(?:\/.*)?)/)) {
         const sub = match[1];
-        console.log('proxy text-to-speech', [req.method, req.url, `https://api.elevenlabs.io/v1/${sub}`]);
+        // console.log('proxy text-to-speech');
 
         // console.log('post', `https://api.openai.com/v1/${sub}`);
         // console.log('request headers', req.headers);
