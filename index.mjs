@@ -29,12 +29,16 @@ const port = parseInt(process.env.PORT, 10) || 80;
 //
 
 dotenv.config();
-const {OPENAI_API_KEY, ELEVEN_LABS_API_KEY} = process.env;
+const {OPENAI_API_KEY, ELEVEN_LABS_API_KEY, ANTHROPIC_API_KEY} = process.env;
 if (!OPENAI_API_KEY) {
   throw new Error('backend missing OPENAI_API_KEY');
 }
 if (!ELEVEN_LABS_API_KEY) {
   throw new Error('backend missing ELEVEN_LABS_API_KEY');
+}
+
+if(!ANTHROPIC_API_KEY) {
+  throw new Error('backend missing ANTHROPIC_API_KEY');
 }
 // process.env.VITE_OPENAI_API_KEY = OPENAI_API_KEY;
 // process.env.VITE_ELEVEN_LABS_API_KEY = ELEVEN_LABS_API_KEY;
@@ -45,6 +49,7 @@ const vercelJson = JSON.parse(fs.readFileSync('./vercel.json', 'utf8'));
 const aiServer = new AiServer({
   apiKey: OPENAI_API_KEY,
   elevenLabsApiKey: ELEVEN_LABS_API_KEY,
+  anthropicApiKey: ANTHROPIC_API_KEY,
 });
 
 //
