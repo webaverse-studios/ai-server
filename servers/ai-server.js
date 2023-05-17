@@ -81,6 +81,7 @@ export class AiServer {
   constructor({
     apiKey,
     elevenLabsApiKey,
+    anthropicApiKey,
   }) {
     if (!apiKey) {
       console.warn('ai server got no api key');
@@ -89,6 +90,7 @@ export class AiServer {
 
     this.apiKey = apiKey;
     this.elevenLabsApiKey = elevenLabsApiKey;
+    this.anthropicApiKey = anthropicApiKey;
   }
   async handleRequest(req, res) {
     try {
@@ -264,6 +266,40 @@ export class AiServer {
             break;
           }
         }
+      } else if (match = req.url.match(/^\/api\/ai\/(claude\/complete)/)) {
+        const proxyRes = await fetch('https://api.anthrophic.com/v1/complete' , {
+          method: req.method,
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Client: "anthropic-typescript/0.4.3",
+            'x-api-key': this.anthropicApiKey,
+          },
+          body: req,
+        });
+        if (proxyRes.ok) {
+          // proxy status
+          res.status(proxyRes.status);
+          // proxy headers
+          [
+            'content-type',
+            'content-length',
+          ].forEach(name => {
+            const value = proxyRes.headers.get(name);
+            if (value) {
+              res.setHeader(name, value);
+            }
+          });
+          // pipe the proxy response web stream to the nodejs response stream
+          Readable.fromWeb(proxyRes.body).pipe(res);
+        } else {
+          const text = await proxyRes.text();
+          console.warn('got api error response', text);
+          res.status(500).send(text);
+        }
+
+
+
       } else {
         console.warn('image client had no url match', req.url);
         res.send(404);
