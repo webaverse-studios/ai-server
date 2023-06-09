@@ -1,63 +1,49 @@
-// import path from 'path';
-// import http from 'http';
-// import https from 'https';
 import fs from 'fs';
-// import child_process from 'child_process';
 
 import express from 'express';
-// import * as vite from 'vite';
 import dotenv from 'dotenv';
 
 import {AiServer} from './servers/ai-server.js';
 
-// import {
-//   COMPILER_NAME,
-//   IMAGE_NAME,
-//   RENDERER_NAME,
-//   WIKI_NAME,
-//   AI_HOST,
-//   AI2_HOST,
-//   SERVER_NAME,
-//   PORTS,
-// } from './servers/server-constants.mjs';
 import {isHttps, makeHttpServer} from './servers/server-utils.mjs';
 
 //
 
-const port = parseInt(process.env.PORT, 10) || 80;
+const port = parseInt(process.env.PORT, 10) || 8800;
 
 //
 
 dotenv.config();
-const {OPENAI_API_KEY, ELEVEN_LABS_API_KEY, ANTHROPIC_API_KEY} = process.env;
+const {OPENAI_API_KEY, ELEVENLABS_API_KEY, BLOCKADELABS_API_KEY, ANTHROPIC_API_KEY} = process.env;
 if (!OPENAI_API_KEY) {
   throw new Error('backend missing OPENAI_API_KEY');
 }
-if (!ELEVEN_LABS_API_KEY) {
-  throw new Error('backend missing ELEVEN_LABS_API_KEY');
+if (!ELEVENLABS_API_KEY) {
+  throw new Error('backend missing ELEVENLABS_API_KEY');
 }
-
-if(!ANTHROPIC_API_KEY) {
+if (!BLOCKADELABS_API_KEY) {
+  throw new Error('backend missing BLOCKADELABS_API_KEY');
+}
+if (!ANTHROPIC_API_KEY) {
   throw new Error('backend missing ANTHROPIC_API_KEY');
 }
-// process.env.VITE_OPENAI_API_KEY = OPENAI_API_KEY;
-// process.env.VITE_ELEVEN_LABS_API_KEY = ELEVEN_LABS_API_KEY;
 
 // const isProduction = process.env.NODE_ENV === 'production';
 const vercelJson = JSON.parse(fs.readFileSync('./vercel.json', 'utf8'));
 
 const aiServer = new AiServer({
-  apiKey: OPENAI_API_KEY,
-  elevenLabsApiKey: ELEVEN_LABS_API_KEY,
+  openAiApiKey: OPENAI_API_KEY,
+  elevenLabsApiKey: ELEVENLABS_API_KEY,
+  blockadeLabsApiKey: BLOCKADELABS_API_KEY,
   anthropicApiKey: ANTHROPIC_API_KEY,
 });
 
 //
 
-const tmpDir = `/tmp/webaverse-dev-server`;
-fs.mkdirSync(tmpDir, {
-  recursive: true,
-});
+// const tmpDir = `/tmp/webaverse-dev-server`;
+// fs.mkdirSync(tmpDir, {
+//   recursive: true,
+// });
 
 const {headers: headerSpecs} = vercelJson;
 const headerSpec0 = headerSpecs[0];
@@ -144,9 +130,6 @@ const _proxyTmp = (req, res) => {
     } else if (
       [
         '/api/ai/',
-        // '/api/image-ai/',
-        // '/api/chat/completions',
-        // '/api/audio/transcriptions',
       ].some(prefix => req.url.startsWith(prefix))
     ) {
       await aiServer.handleRequest(req, res);
@@ -187,6 +170,14 @@ const _proxyTmp = (req, res) => {
   );
 })();
 
+process.on('uncaughtException', function (err) {
+  console.error('uncaughtException', err);
+  // process.exit(1);
+});
+process.on('unhandledRejection', function (err) {
+  console.error('unhandledRejection', err);
+  // process.exit(1);
+});
 process.on('disconnect', function () {
   console.log('dev-server parent exited');
   process.exit();
